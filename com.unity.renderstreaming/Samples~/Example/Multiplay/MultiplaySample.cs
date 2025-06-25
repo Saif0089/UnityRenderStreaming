@@ -8,9 +8,9 @@ namespace Unity.RenderStreaming.Samples
 {
     class MultiplaySample : MonoBehaviour
     {
-        [SerializeField] ToggleGroup toggleGroupRole;
-        [SerializeField] InputField inputFieldUsername;
-        [SerializeField] Button buttonStart;
+        // [SerializeField] ToggleGroup toggleGroupRole;
+        // [SerializeField] InputField inputFieldUsername;
+        // [SerializeField] Button buttonStart;
         [SerializeField] SignalingManager renderStreaming;
         [SerializeField] GameObject prefabHost;
         [SerializeField] GameObject prefabGuest;
@@ -19,8 +19,9 @@ namespace Unity.RenderStreaming.Samples
         [SerializeField] GameObject panel;
         [SerializeField] RawImage videoImage;
         [SerializeField] ShowStatsUI statsUI;
+        [SerializeField] private Role _role = Role.Host;
 
-        enum Role
+        [Serializable] public enum Role
         {
             Host = 0,
             Guest = 1
@@ -36,42 +37,45 @@ namespace Unity.RenderStreaming.Samples
 
         void Start()
         {
-            buttonStart.onClick.AddListener(OnClickButtonStart);
-            inputFieldUsername.text = UnityEngine.Random.Range(0, 99999).ToString("00000");
-            inputFieldUsername.onValueChanged.AddListener(OnValueChangedUserName);
+            // buttonStart.onClick.AddListener(OnClickButtonStart);
+            // inputFieldUsername.text = UnityEngine.Random.Range(0, 99999).ToString("00000");
+            // inputFieldUsername.onValueChanged.AddListener(OnValueChangedUserName);
+
+            OnClickButtonStart();
         }
 
         void OnValueChangedUserName(string value)
         {
-            bool hasNullValue =
-                string.IsNullOrEmpty(inputFieldUsername.text);
-            buttonStart.interactable = !hasNullValue;
+            // bool hasNullValue =
+                // string.IsNullOrEmpty(inputFieldUsername.text);
+            // buttonStart.interactable = !hasNullValue;
         }
 
         void OnClickButtonStart()
         {
-            var username = inputFieldUsername.text;
+            // var username = inputFieldUsername.text;
             var connectionId = Guid.NewGuid().ToString();
 
-            var toggles = toggleGroupRole.GetComponentsInChildren<Toggle>();
-            var activeToggle = toggleGroupRole.ActiveToggles().First();
-            var indexRole = Array.FindIndex(toggles, _ => _ == activeToggle);
-            var role = (Role)indexRole;
+            // var toggles = toggleGroupRole.GetComponentsInChildren<Toggle>();
+            // var activeToggle = toggleGroupRole.ActiveToggles().First();
+            // var indexRole = Array.FindIndex(toggles, _ => _ == activeToggle);
+            // var role = (Role)indexRole;
+            var role = _role;
 
             panel.SetActive(false);
 
             switch (role)
             {
                 case Role.Host:
-                    SetUpHost(username);
+                    SetUpHost(connectionId);
                     break;
                 case Role.Guest:
-                    StartCoroutine(SetUpGuest(username, connectionId));
+                    StartCoroutine(SetUpGuest(connectionId, connectionId));
                     break;
             }
         }
 
-        void SetUpHost(string username)
+        void SetUpHost(string userId)
         {
             menuCamera.SetActive(false);
 
@@ -79,12 +83,12 @@ namespace Unity.RenderStreaming.Samples
             var handler = instance.GetComponent<Multiplay>();
 
             // host player
-            var hostPlayer = GameObject.Instantiate(prefabPlayer);
-            var playerController = hostPlayer.GetComponent<PlayerController>();
-            playerController.SetLabel(username);
-            var playerInput = hostPlayer.GetComponent<InputReceiver>();
-            playerInput.PerformPairingWithAllLocalDevices();
-            playerController.CheckPairedDevices();
+            // var hostPlayer = GameObject.Instantiate(prefabPlayer);
+            // var playerController = hostPlayer.GetComponent<PlayerController>();
+            // playerController.SetLabel(userId);
+            // var playerInput = hostPlayer.GetComponent<InputReceiver>();
+            // playerInput.PerformPairingWithAllLocalDevices();
+            // playerController.CheckPairedDevices();
 
             statsUI.AddSignalingHandler(handler);
             if (settings != null)
