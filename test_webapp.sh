@@ -6,9 +6,9 @@
 PORT=${1:-8080} # Use the first argument as the port, default to 8080 if not provided
 
 cd WebApp
-npm install --legacy-peer-deps
+/home/administrator/.nvm/versions/node/v22.17.0/bin/npm install --legacy-peer-deps
 # npm run lint
 # npm run test
-npm run dev -- -p "$PORT" &
+/home/administrator/.nvm/versions/node/v22.17.0/bin/npm run dev -- -p "$PORT" &
 # sleep 5
 # npm run newman -- -e ./test/env_macos.postman_environment.json
