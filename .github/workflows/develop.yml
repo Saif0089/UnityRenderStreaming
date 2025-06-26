@@ -22,12 +22,12 @@ jobs:
 
     - name: Create log directory
       run: |
-        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S mkdir -p /var/log/webapp
-        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S chown $(whoami) /var/log/webapp
+        echo ${{ secrets.ROOT_PASSWORD }} | sudo -S mkdir -p /var/log/webapp
+        echo ${{ secrets.ROOT_PASSWORD }} | sudo -S chown $(whoami) /var/log/webapp
 
     - name: Create or update systemd service file
       run: |
-        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S tee /etc/systemd/system/$SERVICE_NAME > /dev/null <<EOF
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S bash -c "cat > /etc/systemd/system/\$SERVICE_NAME" <<EOF
         [Unit]
         Description=Web App Service
         After=network.target
