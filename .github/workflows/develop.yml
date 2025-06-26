@@ -43,6 +43,7 @@ jobs:
         WantedBy=multi-user.target
         EOF
         " <<< "${{ secrets.ROOT_PASSWORD }}"
+        " <<< "${{ secrets.ROOT_PASSWORD }}"
 
     - name: Configure log rotation
       run: |
