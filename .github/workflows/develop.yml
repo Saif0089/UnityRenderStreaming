@@ -55,6 +55,7 @@ jobs:
     - name: Reload systemd and restart service
       run: |
         echo ${{ secrets.ROOT_PASSWORD }} | sudo -S systemctl daemon-reload
+        echo ${{ secrets.ROOT_PASSWORD }} | sudo -S systemctl unmask $SERVICE_NAME
         echo ${{ secrets.ROOT_PASSWORD }} | sudo -S systemctl stop $SERVICE_NAME || echo "Service not running"
         echo ${{ secrets.ROOT_PASSWORD }} | sudo -S systemctl start $SERVICE_NAME
         echo ${{ secrets.ROOT_PASSWORD }} | sudo -S systemctl enable $SERVICE_NAME
