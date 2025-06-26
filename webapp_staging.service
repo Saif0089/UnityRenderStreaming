@@ -1,0 +1,12 @@
+[Unit] 
+Description=UnityRenderStreaming Staging
+After=network.target
+
+[Service]
+User=administrator
+WorkingDirectory=/home/administrator/staging/UnityRenderStreaming
+ExecStart=/home/administrator/staging/UnityRenderStreaming/run_staging.sh
+Restart=on-failure
+
+[Install] 
+WantedBy=multi-user.target

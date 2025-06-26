@@ -1,0 +1,12 @@
+[Unit] 
+Description=UnityRenderStreaming Production
+After=network.target
+
+[Service]
+User=administrator
+WorkingDirectory=/home/administrator/prod/UnityRenderStreaming
+ExecStart=/home/administrator/prod/UnityRenderStreaming/run_prod.sh
+Restart=on-failure
+
+[Install] 
+WantedBy=multi-user.target

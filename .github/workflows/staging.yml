@@ -1,22 +1,22 @@
-name: Develop - Deployment
+name: Staging - Deployment
 
 on:
   push:
     branches:
-      - develop
+      - staging
 
 jobs:
   deploy:
     runs-on: Delta-mesh
-    environment: develop
+    environment: staging
     env:
-      SERVICE_NAME: webapp_develop.service
-      RUN_FILE: run_develop.sh
+      SERVICE_NAME: webapp_staging.service
+      RUN_FILE: run_staging.sh
       REPOSITORY_CLONE_URL: ${{ secrets.REPOSITORY_CLONE_URL }}
-      REPOSITORY_DIR: /home/administrator/develop/UnityRenderStreaming
+      REPOSITORY_DIR: /home/administrator/staging/UnityRenderStreaming
     steps:
 
-    - name: Connect to Server
+    - name: Sync Repository
       shell: bash
       run: |
         if [ ! -d $REPOSITORY_DIR ]; then
@@ -26,8 +26,8 @@ jobs:
           git clone $REPOSITORY_CLONE_URL $REPOSITORY_DIR
         fi
         cd $REPOSITORY_DIR
-        git fetch origin develop
-        git reset --hard origin/develop
+        git fetch origin staging
+        git reset --hard origin/staging
 
     - name: Setup Systemd Service
       shell: bash

@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 User=administrator
-WorkingDirectory=/home/administrator/UnityRenderStreaming
-ExecStart=/home/administrator/UnityRenderStreaming/run_develop.sh
+WorkingDirectory=/home/administrator/develop/UnityRenderStreaming
+ExecStart=/home/administrator/develop/UnityRenderStreaming/run_develop.sh
 Restart=on-failure
 
 [Install] 
