@@ -41,7 +41,7 @@ jobs:
 
         [Install]
         WantedBy=multi-user.target
-        EOF
+        EOF "
         " <<< "${{ secrets.ROOT_PASSWORD }}"
         " <<< "${{ secrets.ROOT_PASSWORD }}"
 
