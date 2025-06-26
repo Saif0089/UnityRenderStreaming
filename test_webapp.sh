@@ -11,4 +11,4 @@ echo "Node executable path added to PATH: $(dirname "$NODE_PATH")"
 
 cd WebApp
 npm install --legacy-peer-deps
-npm run dev -- -p $SERVICE_PORT
+npm run dev -- -p 8080
