@@ -22,5 +22,5 @@ jobs:
       shell: bash
       run: |
         whoami
-        find . -name "*.sh" -exec chmod +x {} \;
+        find . -type f -name "*.sh" -exec chmod +x {} \;
         ./test_webapp.sh $SERVICE_PORT
