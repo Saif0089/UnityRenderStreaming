@@ -1,1 +1,43 @@
+name: Develop - Deployment
 
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: Delta-mesh
+    environment: develop
+    env:
+      SERVICE_NAME: webapp.service
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        clean: false
+
+    - name: Make all .sh files executable
+      run: find . -name "*.sh" -exec chmod +x {} \;
+
+    - name: Create or update systemd service file
+      run: |
+        echo "[Unit]
+        Description=Web App Service
+        After=network.target
+
+        [Service]
+        ExecStart=$(pwd)/test_webapp.sh ${{ secrets.DEVELOP_PORT }}
+        Restart=always
+        User=$(whoami)
+        WorkingDirectory=$(pwd)
+
+        [Install]
+        WantedBy=multi-user.target" | sudo tee /etc/systemd/system/$SERVICE_NAME
+
+    - name: Reload systemd and restart service
+      run: |
+        sudo systemctl daemon-reload
+        sudo systemctl stop $SERVICE_NAME || echo "Service not running"
+        sudo systemctl start $SERVICE_NAME
+        sudo systemctl enable $SERVICE_NAME
