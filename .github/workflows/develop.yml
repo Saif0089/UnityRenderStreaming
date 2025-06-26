@@ -21,4 +21,5 @@ jobs:
     - name: Start WebApp
       shell: bash
       run: |
+        npm --version
         npm run dev -- -p $SERVICE_PORT 
