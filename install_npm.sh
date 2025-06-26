@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e  # Exit on error
+set -eu  # Exit on error
 
 # Define NVM directory
 export NVM_DIR="$HOME/.nvm"
