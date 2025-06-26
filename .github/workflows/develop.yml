@@ -14,12 +14,17 @@ jobs:
       SERVICE_PORT: ${{secrets.DEVELOP_PORT}}
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
-        clean: false
+        clean: true
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
 
     - name: Start WebApp
       run: |
-        sh ./install_npm.sh
-        export NVM_DIR="$HOME/.nvm"
-        sh ./test_webapp.sh $SERVICE_PORT
+        cd WebApp
+        npm install --legacy-peer-deps
+        npm run dev -- -p 8080 &
