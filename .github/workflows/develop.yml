@@ -12,7 +12,6 @@ jobs:
   deploy:
     runs-on: Delta-mesh
     env:
-      RANDOM_PORT: $((RANDOM + 1024))
       PROCESS_ID_FILE: process_id.txt
     steps:
     - name: Checkout code
@@ -25,10 +24,14 @@ jobs:
 
     - name: Allow random port in firewall
       run: |
-        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S ufw allow $RANDOM_PORT
+        RANDOM_PORT=$((RANDOM + 1024))
+        echo "Using random port: $RANDOM_PORT"
+        echo "your-password-here" | sudo -S ufw allow $RANDOM_PORT
+        echo $RANDOM_PORT > random_port.txt
 
     - name: Execute test_webapp.sh with random port
       run: |
+        RANDOM_PORT=$(cat random_port.txt)
         echo "Using random port: $RANDOM_PORT"
         ./test_webapp.sh --p $RANDOM_PORT &
         echo $! > $PROCESS_ID_FILE
@@ -36,9 +39,10 @@ jobs:
     - name: Kill test_webapp.sh process and close port
       if: github.event_name == 'push' || github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
       run: |
+        RANDOM_PORT=$(cat random_port.txt)
         if [ -f $PROCESS_ID_FILE ]; then
           kill $(cat $PROCESS_ID_FILE) || echo "Process already terminated"
           rm $PROCESS_ID_FILE
         fi
         echo "Closing random port: $RANDOM_PORT"
-        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S ufw delete allow $RANDOM_PORT
+        echo "your-password-here" | sudo -S ufw delete allow $RANDOM_PORT
