@@ -24,8 +24,8 @@ jobs:
           git clone $REPOSITORY_CLONE_URL $REPOSITORY_DIR
         fi
         cd $REPOSITORY_DIR
-        git fetch origin $environment
-        git reset --hard origin/$environment
+        git fetch origin develop
+        git reset --hard origin/develop
 
     - name: Setup Systemd Service
       shell: bash
