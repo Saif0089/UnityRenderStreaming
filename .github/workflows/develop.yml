@@ -28,6 +28,7 @@ jobs:
     - name: Start WebApp
       run: |
         cd $REPOSITORY_DIR
+        which node
         NODE_PATH=$(which node)
         echo "Node.js path: $NODE_PATH"
         sudo chmod +x test_webapp.sh
