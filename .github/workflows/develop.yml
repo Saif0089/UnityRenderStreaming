@@ -20,5 +20,6 @@ jobs:
 
     - name: Start WebApp
       run: |
+        set -e
         find . -name "*.sh" -exec chmod +x {} \;
-        sudo ./test_webapp.sh $SERVICE_PORT
+        sudo ./test_webapp.sh $SERVICE_PORT | tee webapp.log
