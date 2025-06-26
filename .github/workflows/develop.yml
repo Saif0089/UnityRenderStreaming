@@ -11,60 +11,13 @@ jobs:
     environment: develop
     env:
       SERVICE_NAME: webapp.service
+      SERVICE_PORT: ${{secrets.DEVELOP_PORT}}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
       with:
         clean: false
 
-    - name: Make all .sh files executable
-      run: find . -name "*.sh" -exec chmod +x {} \;
-
-    - name: Create log directory
+    - name: Start WebApp
       run: |
-        sudo mkdir -p /var/log/webapp
-        sudo chown $(whoami) /var/log/webapp
-
-    - name: Create or update systemd service file
-      run: |
-        sudo bash -c "
-        cat > /etc/systemd/system/$SERVICE_NAME << 'EOF'
-        [Unit]
-        Description=Web App Service
-        After=network.target
-
-        [Service]
-        ExecStart=$(pwd)/test_webapp.sh ${{ secrets.DEVELOP_PORT }} >> /var/log/webapp/output.log 2>&1
-        Restart=on-failure
-        User=$(whoami)
-        WorkingDirectory=$(pwd)
-
-        [Install]
-        WantedBy=multi-user.target
-        EOF
-        "
-        echo "Service file created at /etc/systemd/system/$SERVICE_NAME"
-
-    - name: Configure log rotation
-      run: |
-        sudo bash -c "
-        cat > /etc/logrotate.d/webapp << 'EOF'
-        /var/log/webapp/*.log {
-          daily
-          rotate 7
-          compress
-          delaycompress
-          missingok
-          notifempty
-          copytruncate
-        }
-        EOF
-        "
-
-    - name: Reload systemd and restart service
-      run: |
-        sudo systemctl daemon-reload
-        sudo systemctl unmask $SERVICE_NAME || true
-        sudo systemctl stop $SERVICE_NAME || echo "Service not running"
-        sudo systemctl start $SERVICE_NAME
-        sudo systemctl enable $SERVICE_NAME
+        ./test_webapp.sh $SERVICE_PORT
