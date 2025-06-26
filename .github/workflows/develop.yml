@@ -22,12 +22,13 @@ jobs:
 
     - name: Create log directory
       run: |
-        echo ${{ secrets.ROOT_PASSWORD }} | sudo -S mkdir -p /var/log/webapp
-        echo ${{ secrets.ROOT_PASSWORD }} | sudo -S chown $(whoami) /var/log/webapp
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S mkdir -p /var/log/webapp
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S chown $(whoami) /var/log/webapp
 
     - name: Create or update systemd service file
       run: |
-        echo "[Unit]
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S tee /etc/systemd/system/$SERVICE_NAME > /dev/null <<EOF
+        [Unit]
         Description=Web App Service
         After=network.target
 
@@ -38,11 +39,13 @@ jobs:
         WorkingDirectory=$(pwd)
 
         [Install]
-        WantedBy=multi-user.target" | sudo -S tee /etc/systemd/system/$SERVICE_NAME <<< ${{ secrets.ROOT_PASSWORD }}
+        WantedBy=multi-user.target
+        EOF
 
     - name: Configure log rotation
       run: |
-        echo "/var/log/webapp/*.log {
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S tee /etc/logrotate.d/webapp > /dev/null <<EOF
+        /var/log/webapp/*.log {
           daily
           rotate 7
           compress
@@ -50,11 +53,13 @@ jobs:
           missingok
           notifempty
           copytruncate
-        }" | echo ${{ secrets.ROOT_PASSWORD }} | sudo -S tee /etc/logrotate.d/webapp
+        }
+        EOF
 
     - name: Reload systemd and restart service
       run: |
-        echo ${{ secrets.ROOT_PASSWORD }} | sudo -S systemctl daemon-reload
-        echo ${{ secrets.ROOT_PASSWORD }} | sudo -S systemctl stop $SERVICE_NAME || echo "Service not running"
-        echo ${{ secrets.ROOT_PASSWORD }} | sudo -S systemctl start $SERVICE_NAME
-        echo ${{ secrets.ROOT_PASSWORD }} | sudo -S systemctl enable $SERVICE_NAME
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S systemctl daemon-reload
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S systemctl unmask $SERVICE_NAME || true
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S systemctl stop $SERVICE_NAME || echo "Service not running"
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S systemctl start $SERVICE_NAME
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S systemctl enable $SERVICE_NAME
