@@ -7,8 +7,10 @@ on:
       - develop
 
 jobs:
-  deploy:
-    runs-on: Delta-mesh
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    deploy:
+      runs-on: Delta-mesh
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+          with:
+            clean: false
