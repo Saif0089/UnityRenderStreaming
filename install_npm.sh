@@ -1,37 +1,18 @@
-#!/bin/bash
+# Download and install nvm:
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 
-set -eu  # Exit on error
+# in lieu of restarting the shell
+\. "$HOME/.nvm/nvm.sh"
 
-# Define NVM directory
-export NVM_DIR="$HOME/.nvm"
+# Download and install Node.js:
+nvm install 22
 
-# Download and install NVM if not already present
-if [ ! -s "$NVM_DIR/nvm.sh" ]; then
-  echo "Installing NVM..."
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-fi
+# Set the installed Node.js version as the default globally:
+nvm alias default 22
 
-# Load NVM
-if [ -s "$NVM_DIR/nvm.sh" ]; then
-  . "$NVM_DIR/nvm.sh"
-else
-  echo "nvm.sh not found! Exiting."
-  exit 1
-fi
+# Verify the Node.js version:
+node -v # Should print "v22.15.0".
+nvm current # Should print "v22.15.0".
 
-# Load bash_completion (optional)
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
-
-# Install Node.js v22 if not already installed
-if ! nvm ls 22 | grep -q 'v22'; then
-  echo "Installing Node.js v22..."
-  nvm install 22
-fi
-
-# Use Node.js v22
-nvm use 22
-
-# Verify versions
-echo "Node version: $(node -v)"
-echo "NVM current: $(nvm current)"
-echo "npm version: $(npm -v)"
+# Verify npm version:
+npm -v # Should print "10.9.2".
