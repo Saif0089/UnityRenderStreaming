@@ -10,46 +10,34 @@ jobs:
     runs-on: Delta-mesh
     environment: develop
     env:
-      SERVICE_NAME: webapp.service
-      SERVICE_PORT: ${{ secrets.DEVELOP_PORT }}
-      SERVER_IP: ${{ secrets.SERVER_IP }}
-      ADMINISTRATOR_PASSWORD: ${{ secrets.ADMINISTRATOR_PASSWORD }}
+      SERVICE_NAME: webapp_develop.service
       REPOSITORY_CLONE_URL: ${{ secrets.REPOSITORY_CLONE_URL }}
       REPOSITORY_DIR: /home/administrator/UnityRenderStreaming/
     steps:
 
-    - name: Install sshpass
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y sshpass
-
     - name: Connect to Server
       shell: bash
       run: |
-        sshpass -p $ADMINISTRATOR_PASSWORD ssh -o StrictHostKeyChecking=no administrator@$SERVER_IP "echo 'Connected to server successfully.'"
         ls
         if [ ! -d $REPOSITORY_DIR ]; then
           echo "Repository directory does not exist, cloning the repository."
           git clone $REPOSITORY_CLONE_URL $REPOSITORY_DIR
         fi
         cd $REPOSITORY_DIR
-        git fetch origin develop
-        git reset --hard origin/develop
+        git fetch origin $environment
+        git reset --hard origin/$environment
 
-        if ! command -v npm &> /dev/null; then
-          echo "npm not found, installing Node.js and npm using nvm."
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-          \. "$HOME/.nvm/nvm.sh"
-          nvm install 22
-          nvm alias default 22
-          node -v # Should print "v22.15.0".
-          nvm current # Should print "v22.15.0".
-          npm -v # Should print "10.9.2".
-        else
-          echo "npm is already installed."
-          npm -v
-        fi
+    - name: Setup Systemd Service
+      shell: bash
+      run: |
+        sudo cp -f $REPOSITORY_DIR/$SERVICE_NAME /etc/systemd/system/$SERVICE_NAME
+        sudo chmod 644 /etc/systemd/system/$SERVICE_NAME
 
-        cd WebApp
-        npm install --legacy-peer-deps
-        npm run dev -- -p $SERVICE_PORT
+    - name: Restart Service
+      shell: bash
+      run: |
+        sudo systemctl daemon-reload
+        sudo systemctl enable $SERVICE_NAME
+        sudo systemctl stop $SERVICE_NAME
+        sudo systemctl start $SERVICE_NAME
+        sudo systemctl status $SERVICE_NAME
