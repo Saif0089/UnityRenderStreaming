@@ -1,5 +1,3 @@
-./install_npm.sh
-
 cd WebApp
 npm install --legacy-peer-deps
 npm run lint
