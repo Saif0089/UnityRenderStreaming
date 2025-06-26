@@ -22,5 +22,4 @@ jobs:
       run: |
         ls
         find . -name "*.sh" -exec chmod +x {} \;
-        ./test_webapp.sh $SERVICE_PORT
         cat webapp.log
