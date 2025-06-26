@@ -11,6 +11,7 @@ jobs:
     environment: develop
     env:
       SERVICE_NAME: webapp_develop.service
+      RUN_FILE: run_develop.sh
       REPOSITORY_CLONE_URL: ${{ secrets.REPOSITORY_CLONE_URL }}
       REPOSITORY_DIR: /home/administrator/UnityRenderStreaming
     steps:
@@ -30,6 +31,7 @@ jobs:
     - name: Setup Systemd Service
       shell: bash
       run: |
+        sudo chmod +x $REPOSITORY_DIR/$RUN_FILE
         sudo cp -f $REPOSITORY_DIR/$SERVICE_NAME /etc/systemd/system/$SERVICE_NAME
         sudo chmod 644 /etc/systemd/system/$SERVICE_NAME
 
