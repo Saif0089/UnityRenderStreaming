@@ -19,6 +19,8 @@ jobs:
         clean: false
 
     - name: Start WebApp
-      shell: sh
       run: |
-        sh -c "chmod +x ./test_webapp.sh && chmod +x ./install_npm.sh && ./install_npm.sh && ./test_webapp.sh $SERVICE_PORT"
+        chmod +x ./test_webapp.sh
+        chmod +x ./install_npm.sh
+        bash ./install_npm.sh
+        bash ./test_webapp.sh $SERVICE_PORT
