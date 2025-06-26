@@ -34,4 +34,6 @@ jobs:
         cd $REPOSITORY_DIR
         git fetch origin develop
         git reset --hard origin/develop
-        which node
+        
+        chmod +x test_webapp.sh
+        ./test_webapp.sh $SERVICE_PORT
