@@ -1,29 +1,16 @@
 #!/bin/bash -eu
 
-PORT=${1:-8080} # Default port 8080
+# Example usage:
+# To run the script with a specific port (e.g., 3000), use the following command:
+# ./test_webapp.sh 3000
+PORT=${1:-8080} # Use the first argument as the port, default to 8080 if not provided
 
-# Find the full paths to npm and node
-NPM_BIN=$(which npm)
-NODE_BIN=$(which node)
-
-if [[ -z "$NPM_BIN" || -z "$NODE_BIN" ]]; then
-  echo "npm or node not found in PATH!" >&2
-  exit 1
-fi
-
-echo "Using npm: $NPM_BIN"
-echo "Using node: $NODE_BIN"
+./install_npm.sh
 
 cd WebApp
-
-# Use the exact npm path found
-"$NPM_BIN" install --legacy-peer-deps
-
-# Run the dev server with exact npm path
-nohup "$NPM_BIN" run dev -- -p "$PORT" > webapp.log 2>&1 &
-
-# Save PID
-echo $! > webapp.pid
-
-# Optional: brief pause to ensure process starts
+npm install --legacy-peer-deps
+npm run lint
+npm run test
+npm run dev -- -p "$PORT" &
 sleep 5
+npm run newman -- -e ./test/env_macos.postman_environment.json
