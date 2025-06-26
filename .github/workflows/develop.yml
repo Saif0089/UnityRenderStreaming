@@ -20,10 +20,12 @@ jobs:
       with:
         clean: false
 
+    - name: Make all .sh files executable
+      run: find . -name "*.sh" -exec chmod +x {} \;
+
     - name: Execute test_webapp.sh with random port
       run: |
         echo "Using random port: $RANDOM_PORT"
-        sudo chmod +x ./test_webapp.sh
         ./test_webapp.sh --port $RANDOM_PORT &
         echo $! > $PROCESS_ID_FILE
 
