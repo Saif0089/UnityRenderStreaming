@@ -29,4 +29,5 @@ jobs:
       run: |
         cd $REPOSITORY_DIR
         sudo chmod +x test_webapp.sh
+        sudo chmod +x install_npm.sh
         ./test_webapp.sh
