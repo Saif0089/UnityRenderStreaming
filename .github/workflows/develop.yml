@@ -36,5 +36,5 @@ jobs:
         git fetch origin develop
         git reset --hard origin/develop
 
-        chmod +x test_webapp.sh
+        sudo chmod +x test_webapp.sh
         sh ./test_webapp.sh $SERVICE_PORT
