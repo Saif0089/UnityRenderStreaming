@@ -27,7 +27,8 @@ jobs:
 
     - name: Create or update systemd service file
       run: |
-        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S bash -c "cat > /etc/systemd/system/\$SERVICE_NAME" <<EOF
+        sudo -S bash -c "
+        cat > /etc/systemd/system/$SERVICE_NAME << 'EOF'
         [Unit]
         Description=Web App Service
         After=network.target
@@ -41,6 +42,7 @@ jobs:
         [Install]
         WantedBy=multi-user.target
         EOF
+        " <<< "${{ secrets.ROOT_PASSWORD }}"
 
     - name: Configure log rotation
       run: |
