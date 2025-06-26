@@ -5,6 +5,8 @@
 # ./test_webapp.sh 3000
 PORT=${1:-8080} # Use the first argument as the port, default to 8080 if not provided
 
+./install_npm.sh
+
 which npm
 which node
 
