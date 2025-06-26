@@ -29,6 +29,7 @@ jobs:
       run: |
         cd $REPOSITORY_DIR
         NODE_PATH=$(which node)
+        echo "Node.js path: $NODE_PATH"
         sudo chmod +x test_webapp.sh
         sudo chmod +x install_npm.sh
         ./install_npm.sh
