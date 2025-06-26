@@ -20,6 +20,5 @@ jobs:
 
     - name: Start WebApp
       run: |
-        ls
-        find . -name "*.sh" -exec chmod +x {} \;
+        ls &
         cat webapp.log
