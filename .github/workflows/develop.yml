@@ -23,16 +23,23 @@ jobs:
     - name: Make all .sh files executable
       run: find . -name "*.sh" -exec chmod +x {} \;
 
+    - name: Allow random port in firewall
+      run: |
+        echo "Allowing random port: $RANDOM_PORT"
+        sudo ufw allow $RANDOM_PORT
+
     - name: Execute test_webapp.sh with random port
       run: |
         echo "Using random port: $RANDOM_PORT"
         ./test_webapp.sh --port $RANDOM_PORT &
         echo $! > $PROCESS_ID_FILE
 
-    - name: Kill test_webapp.sh process
+    - name: Kill test_webapp.sh process and close port
       if: github.event_name == 'push' || github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
       run: |
         if [ -f $PROCESS_ID_FILE ]; then
           kill $(cat $PROCESS_ID_FILE) || echo "Process already terminated"
           rm $PROCESS_ID_FILE
         fi
+        echo "Closing random port: $RANDOM_PORT"
+        sudo ufw delete allow $RANDOM_PORT
