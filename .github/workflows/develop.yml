@@ -22,12 +22,12 @@ jobs:
 
     - name: Create log directory
       run: |
-        echo ${{ secrets.ROOT_PASSWORD }} | sudo -S mkdir -p /var/log/webapp
-        echo ${{ secrets.ROOT_PASSWORD }} | sudo -S chown $(whoami) /var/log/webapp
+        sudo mkdir -p /var/log/webapp
+        sudo chown $(whoami) /var/log/webapp
 
     - name: Create or update systemd service file
       run: |
-        sudo -S bash -c "
+        sudo bash -c "
         cat > /etc/systemd/system/$SERVICE_NAME << 'EOF'
         [Unit]
         Description=Web App Service
@@ -41,13 +41,12 @@ jobs:
 
         [Install]
         WantedBy=multi-user.target
-        EOF "
-        " <<< "${{ secrets.ROOT_PASSWORD }}"
-        " <<< "${{ secrets.ROOT_PASSWORD }}"
+        EOF
+        "
 
     - name: Configure log rotation
       run: |
-        sudo -S bash -c "
+        sudo bash -c "
         cat > /etc/logrotate.d/webapp << 'EOF'
         /var/log/webapp/*.log {
           daily
@@ -59,12 +58,12 @@ jobs:
           copytruncate
         }
         EOF
-        " <<< "${{ secrets.ROOT_PASSWORD }}"
+        "
 
     - name: Reload systemd and restart service
       run: |
-        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S systemctl daemon-reload
-        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S systemctl unmask $SERVICE_NAME || true
-        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S systemctl stop $SERVICE_NAME || echo "Service not running"
-        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S systemctl start $SERVICE_NAME
-        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S systemctl enable $SERVICE_NAME
+        sudo systemctl daemon-reload
+        sudo systemctl unmask $SERVICE_NAME || true
+        sudo systemctl stop $SERVICE_NAME || echo "Service not running"
+        sudo systemctl start $SERVICE_NAME
+        sudo systemctl enable $SERVICE_NAME
