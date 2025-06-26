@@ -1,1 +1,14 @@
+name: Develop - Deployment
 
+on:
+  push:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: Delta-mesh
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
