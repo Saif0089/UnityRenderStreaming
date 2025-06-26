@@ -21,4 +21,5 @@ jobs:
     - name: Start WebApp
       run: |
         sh ./install_npm.sh
+        export NVM_DIR="$HOME/.nvm"
         sh ./test_webapp.sh $SERVICE_PORT
