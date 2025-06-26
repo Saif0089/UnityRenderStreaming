@@ -31,7 +31,7 @@ jobs:
     - name: Execute test_webapp.sh with random port
       run: |
         echo "Using random port: $RANDOM_PORT"
-        ./test_webapp.sh --port $RANDOM_PORT &
+        ./test_webapp.sh --p $RANDOM_PORT &
         echo $! > $PROCESS_ID_FILE
 
     - name: Kill test_webapp.sh process and close port
