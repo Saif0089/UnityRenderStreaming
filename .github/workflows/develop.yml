@@ -19,7 +19,7 @@ jobs:
         clean: false
 
     - name: Start WebApp
-      shell: bash
+      shell: sh
       run: |
         npm --version
         npm run dev -- -p $SERVICE_PORT 
