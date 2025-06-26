@@ -12,9 +12,21 @@ jobs:
     env:
       SERVICE_NAME: webapp.service
       SERVICE_PORT: ${{ secrets.DEVELOP_PORT }}
+      SERVER_IP: ${{ secrets.SERVER_IP }}
+      ADMINISTRATOR_PASSWORD: ${{ secrets.ADMINISTRATOR_PASSWORD }}
       REPOSITORY_CLONE_URL: ${{ secrets.REPOSITORY_CLONE_URL }}
       REPOSITORY_DIR: /home/administrator/UnityRenderStreaming/
     steps:
+
+    - name: Install sshpass
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y sshpass
+
+    - name: Connect to Server
+      run: |
+        sshpass -p $ADMINISTRATOR_PASSWORD ssh -o StrictHostKeyChecking=no administrator@$SERVER_IP "echo 'Connected to server successfully.'"
+
     - name: Set up REPOSITORY
       run: |
         if [ ! -d $REPOSITORY_DIR ]; then
@@ -24,8 +36,4 @@ jobs:
         cd $REPOSITORY_DIR
         git fetch origin develop
         git reset --hard origin/develop
-
-    - name: Start WebApp
-      shell: bash
-      run: |
         which node
