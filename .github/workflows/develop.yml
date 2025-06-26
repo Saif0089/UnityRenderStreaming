@@ -62,10 +62,10 @@ jobs:
 
     - name: Reload systemd and restart service
       run: |
-        sudo -S bash -c "
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S bash -c '
           systemctl daemon-reload
-          systemctl unmask \$SERVICE_NAME || true
-          systemctl stop \$SERVICE_NAME || echo 'Service not running'
-          systemctl start \$SERVICE_NAME
-          systemctl enable \$SERVICE_NAME
-        " <<< "${{ secrets.ROOT_PASSWORD }}"
+          systemctl unmask $SERVICE_NAME || true
+          systemctl stop $SERVICE_NAME || echo "Service not running"
+          systemctl start $SERVICE_NAME
+          systemctl enable $SERVICE_NAME
+        '
