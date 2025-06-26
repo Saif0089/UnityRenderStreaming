@@ -16,7 +16,7 @@ jobs:
       REPOSITORY_DIR: /home/administrator/develop/UnityRenderStreaming
     steps:
 
-    - name: Connect to Server
+    - name: Sync Repository
       shell: bash
       run: |
         if [ ! -d $REPOSITORY_DIR ]; then
