@@ -43,6 +43,7 @@ jobs:
         WantedBy=multi-user.target
         EOF
         "
+        echo "Service file created at /etc/systemd/system/$SERVICE_NAME"
 
     - name: Configure log rotation
       run: |
