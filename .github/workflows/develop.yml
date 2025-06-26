@@ -17,7 +17,7 @@ jobs:
 
         - name: Execute test_webapp.sh
           run: |
-            chmod +x ./test_webapp.sh
-            ./test_webapp.sh 5054
+            sudo chmod +x ./test_webapp.sh
+            ./test_webapp.sh
 
     
