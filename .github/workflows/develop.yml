@@ -11,20 +11,21 @@ jobs:
     environment: develop
     env:
       SERVICE_NAME: webapp.service
-      SERVICE_PORT: ${{secrets.DEVELOP_PORT}}
+      SERVICE_PORT: ${{ secrets.DEVELOP_PORT }}
+      REPOSITORY_CLONE_URL: ${{ secrets.REPOSITORY_CLONE_URL }}
+      REPOSITORY_DIR: /home/administrator/UnityRenderStreaming/
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        clean: true
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22'
+    - name: Set up REPOSITORY
+      run: |
+        if [ ! -d $REPOSITORY_DIR ]; then
+          echo "Repository directory does not exist, cloning the repository."
+          git clone $REPOSITORY_CLONE_URL $REPOSITORY_DIR
+        fi
+        cd $REPOSITORY_DIR
+        git fetch origin develop
+        git reset --hard origin/develop
 
     - name: Start WebApp
       run: |
-        cd WebApp
-        npm install --legacy-peer-deps
-        nohup npm run dev -- -p $SERVICE_PORT > /dev/null 2>&1 &
+        cd $REPOSITORY_DIR
+        ./test_webapp.sh
