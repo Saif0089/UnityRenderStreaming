@@ -26,7 +26,7 @@ jobs:
       run: |
         RANDOM_PORT=$((RANDOM + 1024))
         echo "Using random port: $RANDOM_PORT"
-        echo "your-password-here" | sudo -S ufw allow $RANDOM_PORT
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S ufw allow $RANDOM_PORT
         echo $RANDOM_PORT > random_port.txt
 
     - name: Execute test_webapp.sh with random port
@@ -45,4 +45,4 @@ jobs:
           rm $PROCESS_ID_FILE
         fi
         echo "Closing random port: $RANDOM_PORT"
-        echo "your-password-here" | sudo -S ufw delete allow $RANDOM_PORT
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S ufw delete allow $RANDOM_PORT
