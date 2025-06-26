@@ -19,6 +19,6 @@ jobs:
         clean: false
 
     - name: Start WebApp
+      shell: bash
       run: |
-        ls &
-        cat webapp.log
+        ./test_webapp.sh $SERVICE_PORT
