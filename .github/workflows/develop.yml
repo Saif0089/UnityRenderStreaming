@@ -12,7 +12,7 @@ jobs:
     env:
       SERVICE_NAME: webapp_develop.service
       REPOSITORY_CLONE_URL: ${{ secrets.REPOSITORY_CLONE_URL }}
-      REPOSITORY_DIR: /home/administrator/UnityRenderStreaming/
+      REPOSITORY_DIR: /home/administrator/UnityRenderStreaming
     steps:
 
     - name: Connect to Server

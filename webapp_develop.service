@@ -7,8 +7,6 @@ User=administrator
 WorkingDirectory=/home/administrator/UnityRenderStreaming
 ExecStart=/home/administrator/UnityRenderStreaming/run_develop.sh
 Restart=on-failure
-StandardOutput=append:/var/log/UnityRenderStreaming/logs/output.log
-StandardError=append:/var/log/UnityRenderStreaming/logs/error.log
 
 [Install] 
 WantedBy=multi-user.target
