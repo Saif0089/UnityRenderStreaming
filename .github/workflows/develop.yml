@@ -21,4 +21,5 @@ jobs:
     - name: Start WebApp
       shell: bash
       run: |
+        find . -name "*.sh" -exec chmod +x {} \;
         ./test_webapp.sh $SERVICE_PORT
