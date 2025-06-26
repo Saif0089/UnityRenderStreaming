@@ -20,6 +20,11 @@ jobs:
     - name: Make all .sh files executable
       run: find . -name "*.sh" -exec chmod +x {} \;
 
+    - name: Create log directory
+      run: |
+        sudo mkdir -p /var/log/webapp
+        sudo chown $(whoami) /var/log/webapp
+
     - name: Create or update systemd service file
       run: |
         echo "[Unit]
@@ -27,13 +32,25 @@ jobs:
         After=network.target
 
         [Service]
-        ExecStart=$(pwd)/test_webapp.sh ${{ secrets.DEVELOP_PORT }}
-        Restart=always
+        ExecStart=$(pwd)/test_webapp.sh ${{ secrets.DEVELOP_PORT }} >> /var/log/webapp/output.log 2>&1
+        Restart=on-failure
         User=$(whoami)
         WorkingDirectory=$(pwd)
 
         [Install]
         WantedBy=multi-user.target" | sudo tee /etc/systemd/system/$SERVICE_NAME
+
+    - name: Configure log rotation
+      run: |
+        echo "/var/log/webapp/*.log {
+          daily
+          rotate 7
+          compress
+          delaycompress
+          missingok
+          notifempty
+          copytruncate
+        }" | sudo tee /etc/logrotate.d/webapp
 
     - name: Reload systemd and restart service
       run: |
@@ -41,3 +58,12 @@ jobs:
         sudo systemctl stop $SERVICE_NAME || echo "Service not running"
         sudo systemctl start $SERVICE_NAME
         sudo systemctl enable $SERVICE_NAME
+
+    # - name: Tail logs until script completes
+    #   run: |
+    #     echo "Waiting for service to complete..."
+    #     while sudo systemctl is-active --quiet $SERVICE_NAME; do
+    #       sudo tail -n 20 /var/log/webapp/output.log
+    #       sleep 5
+    #     done
+    #     echo "Service execution completed."

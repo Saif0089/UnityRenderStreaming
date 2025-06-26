@@ -9,7 +9,7 @@ PORT=${1:-8080} # Use the first argument as the port, default to 8080 if not pro
 
 cd WebApp
 npm install --legacy-peer-deps
-# npm run lint
+npm run lint
 # npm run test
 # Run the npm dev server with nohup to keep it running even after the terminal is closed
 nohup npm run dev -- -p "$PORT" > webapp.log 2>&1 &
