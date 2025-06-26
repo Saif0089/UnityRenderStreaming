@@ -25,8 +25,7 @@ jobs:
 
     - name: Allow random port in firewall
       run: |
-        echo "Allowing random port: $RANDOM_PORT"
-        sudo ufw allow $RANDOM_PORT
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S ufw allow $RANDOM_PORT
 
     - name: Execute test_webapp.sh with random port
       run: |
@@ -42,4 +41,4 @@ jobs:
           rm $PROCESS_ID_FILE
         fi
         echo "Closing random port: $RANDOM_PORT"
-        sudo ufw delete allow $RANDOM_PORT
+        echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S ufw delete allow $RANDOM_PORT
