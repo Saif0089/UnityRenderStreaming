@@ -28,5 +28,4 @@ jobs:
     - name: Start WebApp
       shell: bash
       run: |
-        cd $REPOSITORY_DIR
         which node
