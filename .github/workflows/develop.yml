@@ -27,8 +27,6 @@ jobs:
       run: |
         sshpass -p $ADMINISTRATOR_PASSWORD ssh -o StrictHostKeyChecking=no administrator@$SERVER_IP "echo 'Connected to server successfully.'"
 
-    - name: Set up REPOSITORY
-      run: |
         if [ ! -d $REPOSITORY_DIR ]; then
           echo "Repository directory does not exist, cloning the repository."
           git clone $REPOSITORY_CLONE_URL $REPOSITORY_DIR
