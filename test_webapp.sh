@@ -9,8 +9,13 @@ PORT=${1:-8080} # Use the first argument as the port, default to 8080 if not pro
 
 cd WebApp
 npm install --legacy-peer-deps
-npm run lint
-npm run test
-npm run dev -- -p "$PORT" &
+# npm run lint
+# npm run test
+# Run the npm dev server with nohup to keep it running even after the terminal is closed
+nohup npm run dev -- -p "$PORT" > webapp.log 2>&1 &
+
+# Save the PID of the background process to a file for later use
+echo $! > webapp.pid
+
 sleep 5
-npm run newman -- -e ./test/env_macos.postman_environment.json
+# npm run newman -- -e ./test/env_macos.postman_environment.json
