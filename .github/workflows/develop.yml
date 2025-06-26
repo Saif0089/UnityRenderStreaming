@@ -36,5 +36,20 @@ jobs:
         git fetch origin develop
         git reset --hard origin/develop
 
-        sudo chmod +x test_webapp.sh
-        sh ./test_webapp.sh $SERVICE_PORT
+        if ! command -v npm &> /dev/null; then
+          echo "npm not found, installing Node.js and npm using nvm."
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+          \. "$HOME/.nvm/nvm.sh"
+          nvm install 22
+          nvm alias default 22
+          node -v # Should print "v22.15.0".
+          nvm current # Should print "v22.15.0".
+          npm -v # Should print "10.9.2".
+        else
+          echo "npm is already installed."
+          npm -v
+        fi
+
+        cd WebApp
+        npm install --legacy-peer-deps
+        npm run dev -- -p $SERVICE_PORT
