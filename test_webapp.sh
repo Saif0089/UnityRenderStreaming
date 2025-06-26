@@ -7,6 +7,9 @@ PORT=${1:-8080} # Use the first argument as the port, default to 8080 if not pro
 
 ./install_npm.sh
 
+which npm
+pwd
+
 cd WebApp
 npm install --legacy-peer-deps
 npm run lint
