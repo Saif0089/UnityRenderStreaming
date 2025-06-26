@@ -29,12 +29,13 @@ jobs:
         echo "${{ secrets.ROOT_PASSWORD }}" | sudo -S ufw allow $RANDOM_PORT
         echo $RANDOM_PORT > random_port.txt
 
-    - name: Execute test_webapp.sh with random port
+    - name: Execute test_webapp.sh with random port and wait for process to finish
       run: |
         RANDOM_PORT=$(cat random_port.txt)
         echo "Using random port: $RANDOM_PORT"
         ./test_webapp.sh --p $RANDOM_PORT &
         echo $! > $PROCESS_ID_FILE
+        wait $!
 
     - name: Kill test_webapp.sh process and close port
       if: github.event_name == 'push' || github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
