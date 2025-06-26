@@ -41,7 +41,8 @@ jobs:
 
         # Verify npm version:
         npm -v # Should print "10.9.2".
-
+        
+        cd WebApp
         npm init -y
         npm install --legacy-peer-deps
         npm run dev -- -p $SERVICE_PORT 
