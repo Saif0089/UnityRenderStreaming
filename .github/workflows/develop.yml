@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: Delta-mesh
+    environment: develop
     env:
       SERVICE_NAME: webapp.service
     steps:
