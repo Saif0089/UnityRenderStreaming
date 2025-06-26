@@ -28,4 +28,5 @@ jobs:
     - name: Start WebApp
       run: |
         cd $REPOSITORY_DIR
+        sudo chmod +x test_webapp.sh
         ./test_webapp.sh
