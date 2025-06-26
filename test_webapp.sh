@@ -1,14 +1,10 @@
 #!/bin/bash
 
-./install_npm.sh
+SERVICE_PORT=${1:-8080} # Default to 8080 if no argument is provided
+NODE_PATH=${2:-$(which node)} # Default to `which node` if no argument is provided
 
-# Find the path to the node executable
-NODE_PATH=$(which node)
-
-# Export the path
-export PATH=$(dirname "$NODE_PATH"):$PATH
-echo "Node executable path added to PATH: $(dirname "$NODE_PATH")"
+export PATH=$NODE_PATH:$PATH
 
 cd WebApp
 npm install --legacy-peer-deps
-npm run dev -- -p 8080
+npm run dev -- -p $SERVICE_PORT

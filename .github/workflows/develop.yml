@@ -28,6 +28,8 @@ jobs:
     - name: Start WebApp
       run: |
         cd $REPOSITORY_DIR
+        NODE_PATH=$(which node)
         sudo chmod +x test_webapp.sh
         sudo chmod +x install_npm.sh
-        ./test_webapp.sh
+        ./install_npm.sh
+        ./test_webapp.sh $SERVICE_PORT $NODE_PATH
