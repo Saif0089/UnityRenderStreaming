@@ -106,7 +106,7 @@ function onConnect() {
 async function onOpenMultiplayChannel() {
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  const newGuid = crypto.randomBytes(20).toString('hex');
+  const newGuid = uuidv4();
 
   const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(newGuid) });
   multiplayChannel.send(json);
