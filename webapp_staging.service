@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 User=administrator
-WorkingDirectory=/home/administrator/staging/UnityRenderStreaming
-ExecStart=/home/administrator/staging/UnityRenderStreaming/run_staging.sh
+WorkingDirectory=/home/administrator/staging/Delta_Unity_WebApp
+ExecStart=/home/administrator/staging/Delta_Unity_WebApp/run_staging.sh
 Restart=on-failure
 
 [Install] 

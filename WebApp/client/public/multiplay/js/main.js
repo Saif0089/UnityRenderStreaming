@@ -6,7 +6,8 @@ import { Signaling, WebSocketSignaling } from "../../module/signaling.js";
 
 /** @enum {number} */
 const ActionType = {
-  ChangeLabel: 0
+  ChangeLabel: 0,
+  ChangeVideoSize: 1,
 };
 
 /** @type {Element} */
@@ -34,12 +35,16 @@ window.document.oncontextmenu = function () {
   return false;     // cancel default menu
 };
 
+let resizeTimeout;
 window.addEventListener('resize', function () {
-  videoPlayer.resizeVideo();
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    onVideoSizeChange(window.innerWidth, window.innerHeight);
+  }, 1000);
 }, true);
 
 window.addEventListener('beforeunload', async () => {
-  if(!renderstreaming)
+  if (!renderstreaming)
     return;
   await renderstreaming.stop();
 }, true);
@@ -107,6 +112,14 @@ async function onOpenMultiplayChannel() {
   await new Promise(resolve => setTimeout(resolve, 100));
   const num = Math.floor(Math.random() * 100000);
   const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(num) });
+  multiplayChannel.send(json);
+}
+
+async function onVideoSizeChange(width, height) {
+  if (!renderstreaming) {
+    return;
+  }
+  const json = JSON.stringify({ type: ActionType.ChangeVideoSize, argument: String(width) + 'x' + String(height) });
   multiplayChannel.send(json);
 }
 

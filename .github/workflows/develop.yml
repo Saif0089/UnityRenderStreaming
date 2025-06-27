@@ -13,7 +13,7 @@ jobs:
       SERVICE_NAME: webapp_develop.service
       RUN_FILE: run_develop.sh
       REPOSITORY_CLONE_URL: ${{ secrets.REPOSITORY_CLONE_URL }}
-      REPOSITORY_DIR: /home/administrator/develop/UnityRenderStreaming
+      REPOSITORY_DIR: /home/administrator/develop/Delta_Unity_WebApp
     steps:
 
     - name: Sync Repository

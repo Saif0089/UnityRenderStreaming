@@ -13,7 +13,7 @@ jobs:
       SERVICE_NAME: webapp_staging.service
       RUN_FILE: run_staging.sh
       REPOSITORY_CLONE_URL: ${{ secrets.REPOSITORY_CLONE_URL }}
-      REPOSITORY_DIR: /home/administrator/staging/UnityRenderStreaming
+      REPOSITORY_DIR: /home/administrator/staging/Delta_Unity_WebApp
     steps:
 
     - name: Sync Repository
