@@ -105,8 +105,10 @@ function onConnect() {
 
 async function onOpenMultiplayChannel() {
   await new Promise(resolve => setTimeout(resolve, 100));
-  const num = Math.floor(Math.random() * 100000);
-  const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(num) });
+
+  const newGuid = crypto.randomUUID();
+
+  const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(newGuid) });
   multiplayChannel.send(json);
 }
 
