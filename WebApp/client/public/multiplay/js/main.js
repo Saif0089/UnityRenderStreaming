@@ -3,7 +3,6 @@ import { createDisplayStringArray } from "../../js/stats.js";
 import { VideoPlayer } from "../../js/videoplayer.js";
 import { RenderStreaming } from "../../module/renderstreaming.js";
 import { Signaling, WebSocketSignaling } from "../../module/signaling.js";
-import { crypto } from "../../module/crypto.js";
 
 /** @enum {number} */
 const ActionType = {
