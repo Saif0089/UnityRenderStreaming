@@ -3,7 +3,6 @@ import { createDisplayStringArray } from "../../js/stats.js";
 import { VideoPlayer } from "../../js/videoplayer.js";
 import { RenderStreaming } from "../../module/renderstreaming.js";
 import { Signaling, WebSocketSignaling } from "../../module/signaling.js";
-const crypto = require('crypto');
 
 /** @enum {number} */
 const ActionType = {
@@ -107,7 +106,7 @@ function onConnect() {
 async function onOpenMultiplayChannel() {
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  const newGuid = crypto.randomUUID();
+  const newGuid = crypto.randomBytes(20).toString('hex');
 
   const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(newGuid) });
   multiplayChannel.send(json);
