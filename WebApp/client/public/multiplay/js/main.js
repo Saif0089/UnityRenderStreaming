@@ -68,6 +68,7 @@ function showPlayButton() {
     elementPlayButton.alt = 'Start Streaming';
     playButton = document.getElementById('player').appendChild(elementPlayButton);
     playButton.addEventListener('click', onClickPlayButton);
+    onClickPlayButton();
   }
 }
 
