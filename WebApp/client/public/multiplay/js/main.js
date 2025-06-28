@@ -109,23 +109,32 @@ function onConnect() {
 }
 
 async function onOpenMultiplayChannel() {
-  while (multiplayChannel.readyState !== 'open') {
-    await new Promise(resolve => setImmediate(resolve));
+  if (multiplayChannel.readyState === 'open') {
+    const num = Math.floor(Math.random() * 100000);
+    const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(num) });
+    multiplayChannel.send(json);
+  } else {
+    multiplayChannel.addEventListener('open', () => {
+      const num = Math.floor(Math.random() * 100000);
+      const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(num) });
+      multiplayChannel.send(json);
+    }, { once: true });
   }
-  const num = Math.floor(Math.random() * 100000);
-  const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(num) });
-  multiplayChannel.send(json);
 }
 
 async function onVideoSizeChange(width, height) {
   if (!renderstreaming) {
     return;
   }
-  while (multiplayChannel.readyState !== 'open') {
-    await new Promise(resolve => setImmediate(resolve));
+  if (multiplayChannel.readyState === 'open') {
+    const json = JSON.stringify({ type: ActionType.ChangeVideoSize, argument: String(width) + 'x' + String(height) });
+    multiplayChannel.send(json);
+  } else {
+    multiplayChannel.addEventListener('open', () => {
+      const json = JSON.stringify({ type: ActionType.ChangeVideoSize, argument: String(width) + 'x' + String(height) });
+      multiplayChannel.send(json);
+    }, { once: true });
   }
-  const json = JSON.stringify({ type: ActionType.ChangeVideoSize, argument: String(width) + 'x' + String(height) });
-  multiplayChannel.send(json);
 }
 
 async function onDisconnect(connectionId) {
