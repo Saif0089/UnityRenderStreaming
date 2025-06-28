@@ -114,7 +114,7 @@ async function onOpenMultiplayChannel() {
       if (multiplayChannel.readyState === 'open') {
         resolve();
       } else {
-        setTimeout(checkState, 50);
+        setTimeout(checkState, 5000);
       }
     };
     checkState();
