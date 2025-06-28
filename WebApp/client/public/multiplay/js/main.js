@@ -109,32 +109,44 @@ function onConnect() {
 }
 
 async function onOpenMultiplayChannel() {
-  if (multiplayChannel.readyState === 'open') {
-    const num = Math.floor(Math.random() * 100000);
-    const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(num) });
-    multiplayChannel.send(json);
-  } else {
-    multiplayChannel.addEventListener('open', () => {
-      const num = Math.floor(Math.random() * 100000);
-      const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(num) });
-      multiplayChannel.send(json);
-    }, { once: true });
-  }
+  const waitForOpen = () => new Promise(resolve => {
+    const checkState = () => {
+      if (multiplayChannel.readyState === 'open') {
+        resolve();
+      } else {
+        setTimeout(checkState, 50);
+      }
+    };
+    checkState();
+  });
+
+  await waitForOpen();
+  const num = Math.floor(Math.random() * 100000);
+  const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(num) });
+  multiplayChannel.send(json);
+  console.log('Message sent:', json);
 }
 
 async function onVideoSizeChange(width, height) {
   if (!renderstreaming) {
     return;
   }
-  if (multiplayChannel.readyState === 'open') {
-    const json = JSON.stringify({ type: ActionType.ChangeVideoSize, argument: String(width) + 'x' + String(height) });
-    multiplayChannel.send(json);
-  } else {
-    multiplayChannel.addEventListener('open', () => {
-      const json = JSON.stringify({ type: ActionType.ChangeVideoSize, argument: String(width) + 'x' + String(height) });
-      multiplayChannel.send(json);
-    }, { once: true });
-  }
+
+  const waitForOpen = () => new Promise(resolve => {
+    const checkState = () => {
+      if (multiplayChannel.readyState === 'open') {
+        resolve();
+      } else {
+        setTimeout(checkState, 50);
+      }
+    };
+    checkState();
+  });
+
+  await waitForOpen();
+  const json = JSON.stringify({ type: ActionType.ChangeVideoSize, argument: String(width) + 'x' + String(height) });
+  multiplayChannel.send(json);
+  console.log('Message sent:', json);
 }
 
 async function onDisconnect(connectionId) {
