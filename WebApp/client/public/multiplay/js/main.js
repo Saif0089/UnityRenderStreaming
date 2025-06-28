@@ -109,18 +109,6 @@ function onConnect() {
 }
 
 async function onOpenMultiplayChannel() {
-  const waitForOpen = () => new Promise(resolve => {
-    const checkState = () => {
-      if (multiplayChannel.readyState === 'open') {
-        resolve();
-      } else {
-        setTimeout(checkState, 5000);
-      }
-    };
-    checkState();
-  });
-
-  await waitForOpen();
   const num = Math.floor(Math.random() * 100000);
   const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(num) });
   multiplayChannel.send(json);
