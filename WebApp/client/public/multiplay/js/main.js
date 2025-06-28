@@ -109,7 +109,9 @@ function onConnect() {
 }
 
 async function onOpenMultiplayChannel() {
-  await new Promise(resolve => setTimeout(resolve, 100));
+  while (multiplayChannel.readyState !== 'open') {
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
   const num = Math.floor(Math.random() * 100000);
   const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(num) });
   multiplayChannel.send(json);
@@ -118,6 +120,9 @@ async function onOpenMultiplayChannel() {
 async function onVideoSizeChange(width, height) {
   if (!renderstreaming) {
     return;
+  }
+  while (multiplayChannel.readyState !== 'open') {
+    await new Promise(resolve => setTimeout(resolve, 100));
   }
   const json = JSON.stringify({ type: ActionType.ChangeVideoSize, argument: String(width) + 'x' + String(height) });
   multiplayChannel.send(json);
