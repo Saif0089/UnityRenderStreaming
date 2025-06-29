@@ -20,7 +20,7 @@ export const createServer = (config: Options): express.Application => {
   app.use(cors({origin: '*'}));
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
-  app.get('/config', (req, res) => res.json({ useWebSocket: config.type == 'http', startupMode: config.mode, logging: config.logging }));
+  app.get('/config', (req, res) => res.json({ useWebSocket: config.type == 'websocket', startupMode: config.mode, logging: config.logging }));
   app.use('/signaling', signaling);
   app.use(express.static(path.join(__dirname, '../client/public')));
   app.use('/module', express.static(path.join(__dirname, '../client/src')));

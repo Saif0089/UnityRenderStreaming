@@ -6,4 +6,4 @@ npm install --legacy-peer-deps
 cd /home/administrator/develop/Delta_Unity_WebApp/WebApp
 npm install
 npm install --legacy-peer-deps
-npm run dev -- -p 5054 -- -t http
+npm run dev -- -p 5054
