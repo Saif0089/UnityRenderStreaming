@@ -147,7 +147,7 @@ async function onVideoSizeChange(width, height) {
   });
 
   await waitForOpen();
-  const json = JSON.stringify({ type: ActionType.ChangeVideoSize, argument: String(width) + 'x' + String(height) });
+  let json = JSON.stringify({ type: ActionType.ChangeVideoSize, argument: String(width) + 'x' + String(height) });
   multiplayChannel.send(json);
   console.log('Message sent:', json);
 
