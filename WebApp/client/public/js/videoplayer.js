@@ -32,6 +32,7 @@ export class VideoPlayer {
     this.fullScreenButtonElement = document.createElement('img');
     this.fullScreenButtonElement.id = 'fullscreenButton';
     this.fullScreenButtonElement.src = '../images/FullScreen.png';
+    this.fullScreenButtonElement.style.display = 'none'; // Make the element hidden
     this.fullScreenButtonElement.addEventListener("click", this._onClickFullscreenButton.bind(this));
     this.playerElement.appendChild(this.fullScreenButtonElement);
 
@@ -41,6 +42,10 @@ export class VideoPlayer {
   }
 
   _onLoadedVideo() {
+    this.videoElement.autoplay = true; // Enable autoplay
+    this.videoElement.muted = true; // Mute video to allow autoplay without user interaction
+    this.videoElement.style.width = '100%';
+    this.videoElement.style.height = '100%';
     this.videoElement.play();
     this.resizeVideo();
   }

@@ -6,7 +6,8 @@ import { Signaling, WebSocketSignaling } from "../../module/signaling.js";
 
 /** @enum {number} */
 const ActionType = {
-  ChangeLabel: 0
+  ChangeLabel: 0,
+  ChangeVideoSize: 1,
 };
 
 /** @type {Element} */
@@ -34,12 +35,16 @@ window.document.oncontextmenu = function () {
   return false;     // cancel default menu
 };
 
+let resizeTimeout;
 window.addEventListener('resize', function () {
-  videoPlayer.resizeVideo();
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    onVideoSizeChange(window.innerWidth, window.innerHeight);
+  }, 1000);
 }, true);
 
 window.addEventListener('beforeunload', async () => {
-  if(!renderstreaming)
+  if (!renderstreaming)
     return;
   await renderstreaming.stop();
 }, true);
@@ -68,6 +73,7 @@ function showPlayButton() {
     elementPlayButton.alt = 'Start Streaming';
     playButton = document.getElementById('player').appendChild(elementPlayButton);
     playButton.addEventListener('click', onClickPlayButton);
+    onClickPlayButton();
   }
 }
 
@@ -104,9 +110,44 @@ function onConnect() {
 
 async function onOpenMultiplayChannel() {
   await new Promise(resolve => setTimeout(resolve, 100));
+  const waitForOpen = () => new Promise(resolve => {
+    const checkState = () => {
+      if (multiplayChannel.readyState === 'open') {
+        resolve();
+      } else {
+        setTimeout(checkState, 50);
+      }
+    };
+    checkState();
+  });
+
+  await waitForOpen();
   const num = Math.floor(Math.random() * 100000);
   const json = JSON.stringify({ type: ActionType.ChangeLabel, argument: String(num) });
   multiplayChannel.send(json);
+  console.log('Message sent:', json);
+}
+
+async function onVideoSizeChange(width, height) {
+  if (!renderstreaming) {
+    return;
+  }
+
+  const waitForOpen = () => new Promise(resolve => {
+    const checkState = () => {
+      if (multiplayChannel.readyState === 'open') {
+        resolve();
+      } else {
+        setTimeout(checkState, 50);
+      }
+    };
+    checkState();
+  });
+
+  await waitForOpen();
+  const json = JSON.stringify({ type: ActionType.ChangeVideoSize, argument: String(width) + 'x' + String(height) });
+  multiplayChannel.send(json);
+  console.log('Message sent:', json);
 }
 
 async function onDisconnect(connectionId) {

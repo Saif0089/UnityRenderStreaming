@@ -14,5 +14,9 @@
     "jest-environment-jsdom": "^29.0.2",
     "node-fetch": "^3.2.10"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "uuidv4": "^6.2.13"
+  }
 }
